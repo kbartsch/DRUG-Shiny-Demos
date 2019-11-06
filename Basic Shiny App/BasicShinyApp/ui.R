@@ -12,7 +12,7 @@ sidebar <- dashboardSidebar(
     sidebarMenu(
         id="sidebar"
         ,menuItem("Overview",tabName="Overview",icon=icon("fas fa-home"))
-        ,menuItem('Plots',tabName = "plot",icon = icon("bar-chart-o"))
+        ,menuItem('Plots',tabName = "plots",icon = icon("bar-chart-o"))
         ,menuItem('Data Table',tabName = "table",icon = icon("fas fa-table"))
         ,br()
     )
@@ -36,16 +36,26 @@ body <- dashboardBody(
             )
         )
         ,tabItem(
-            tabName = "plot", 
+            tabName = "plots", 
             fluidRow(
                 column(
-                    12,
+                    6,
                     box(
                         title = "", 
                         id = "",
                         height= "auto",
                         width = "auto",
-                        ""
+                        plotlyOutput("ScatterPlot",height="750px")
+                    )
+                ), 
+                column(
+                    6,
+                    box(
+                        title = "", 
+                        id = "",
+                        height= "auto",
+                        width = "auto",
+                        plotlyOutput("BoxPlot",height="750px")
                     )
                 )
             )
@@ -56,11 +66,11 @@ body <- dashboardBody(
                 column(
                     12,
                     box(
-                        title = "", 
+                        title = "Raw Data Table", 
                         id = "",
                         height= "auto",
                         width = "auto",
-                        ""
+                        DT::dataTableOutput("rawdata")
                     )
                 )
             )
