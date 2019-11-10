@@ -9,11 +9,12 @@ data <- diamonds
 
 data <- sample_n(data,1000)
 
-scatterTable <- data %>%
-  group_by(cut,color) %>%
-  tally() 
+CutsTable <- data %>%
+  group_by(cut) %>%
+  tally() %>%
+  select(cut,`Total Rows` = n)
 
-
-BoxplotTable <- data %>%
-  group_by(cut,clarity) %>%
-  tally() 
+ColorsTable <- data %>%
+  group_by(color) %>%
+  tally() %>%
+  select(color, `Total Rows` = n)

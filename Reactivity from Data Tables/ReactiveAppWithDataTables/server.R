@@ -1,79 +1,94 @@
 
 server <- function(input, output, session) {
   
-
-    reactiveData <- reactive({
-        
-        data %>%
-            filter(cut %in% input$selectedCut, 
-                   color %in% input$selectedColor, 
-                   clarity %in% input$selectedClarity, 
-                   depth >= min(input$selectedDepth) & depth <= max(input$selectedDepth),
-                   price >= min(input$selectedPrice) & price <= max(input$selectedPrice)
-                   )
-        
-    })    
-    
-  
-    output$ScatterPlot <- renderPlotly({
-    
-      dataset <- reactiveData()
+  reactiveData <- reactive({
       
-        x <- list(
-          title = "Carat",
-          showgrid = FALSE,
-          zeroline = TRUE,
-          showline = FALSE,
-          showticklabels = TRUE
-        )
-        
-        y <- list(
-          title = "Price",
-          showgrid = FALSE,
-          zeroline = TRUE,
-          showline = TRUE,
-          showticklabels = TRUE
-        )
-        
-        margin <- list(
-          autoexpand = TRUE,
-          l = 10,
-          r = 10,
-          t = 100
-        )
+    cutRows <- input$scatterCutsTable_rows_selected 
+    if(!is.null(cutRows)){
+      cuts <- apply(CutsTable[cutRows,'cut'],1,paste,collapse="|")
+    } else {
+      cuts <- unique(data$cut)
+    }
     
-        p <- plot_ly(
-          data = dataset, 
-          type ='scatter',
-          x = ~carat, 
-          y = ~price, 
-          text = ~paste0("Carat: ",carat, "<br /> Price: ",price),
-          hoverinfo = 'text',
-          mode = "markers",
-          color = ~cut, 
-          marker = list(size = 8,width = 2)
-        ) %>% 
-          layout(
-              title = 'Carat vs. Price', 
-              legend = list(x = 100, y = 0.1),
-              xaxis = x, 
-              yaxis = y,
-              title = list(
-                  font = "'Noto Serif', serif",
-                  size=30,
-                  color="#004F80"
-              ), 
-              margin = margin,
-              showlegend=TRUE
-          ) %>%
-          config(
-            displayModeBar = TRUE,
-            displaylogo = FALSE
-          )
+    colorRows <- input$scatterColorsTable_rows_selected
+    if(!is.null(colorRows)){
+      colors <- apply(ColorsTable[colorRows,'color'],1,paste,collapse="|")
+    } else {
+      colors <- unique(data$color)
+    }
     
-        p
     
-    })
+    data %>%
+        filter(
+          cut %in% cuts, 
+          color %in% colors, 
+          depth >= min(input$selectedDepth) & depth <= max(input$selectedDepth),
+          price >= min(input$selectedPrice) & price <= max(input$selectedPrice)
+         )
+      
+  })    
+  
+  
+  output$ScatterPlot <- renderPlotly({
+  
+    dataset <- reactiveData()
+    
+      x <- list(
+        title = "Carat",
+        showgrid = FALSE,
+        zeroline = TRUE,
+        showline = FALSE,
+        showticklabels = TRUE
+      )
+      
+      y <- list(
+        title = "Price",
+        showgrid = FALSE,
+        zeroline = TRUE,
+        showline = TRUE,
+        showticklabels = TRUE
+      )
+      
+      margin <- list(
+        autoexpand = TRUE,
+        l = 10,
+        r = 10,
+        t = 100
+      )
+  
+      p <- plot_ly(
+        data = dataset, 
+        type ='scatter',
+        x = ~carat, 
+        y = ~price, 
+        text = ~paste0("Carat: ",carat, "<br /> Price: ",price,
+                       "<br />Cut: ",cut,"<br />Color: ",color),
+        hoverinfo = 'text',
+        mode = "markers",
+        color = ~cut, 
+        marker = list(size = 8,width = 2)
+      ) %>% 
+        layout(
+            title = 'Carat vs. Price', 
+            legend = list(x = 100, y = 0.1),
+            xaxis = x, 
+            yaxis = y,
+            title = list(
+                font = "'Noto Serif', serif",
+                size=30,
+                color="#004F80"
+            ), 
+            margin = margin,
+            showlegend=TRUE
+        ) %>%
+        config(
+          displayModeBar = TRUE,
+          displaylogo = FALSE
+        )
+  
+      p
+  
+  })
   
   
   output$BoxPlot <- renderPlotly({
@@ -149,12 +164,12 @@ server <- function(input, output, session) {
     
     })
   
-  output$scatterTable <- DT::renderDataTable(DT::datatable(
-    data=scatterTable,
+  output$scatterCutsTable <- DT::renderDataTable(DT::datatable(
+    data=CutsTable,
     options = list(
+      dom = 't',
       autowidth=TRUE,
       scrollX =TRUE,
-      scrollY = '700px',
       columnDefs = list(
         list(
           width = '200px', 
@@ -166,12 +181,12 @@ server <- function(input, output, session) {
     rownames = FALSE
   ))
   
-  output$BoxplotTable <- DT::renderDataTable(DT::datatable(
-    data=BoxplotTable,
+  output$scatterColorsTable <- DT::renderDataTable(DT::datatable(
+    data=ColorsTable,
     options = list(
+      dom = 't',
       autowidth=TRUE,
       scrollX =TRUE,
-      scrollY = '700px',
       columnDefs = list(
         list(
           width = '200px', 
@@ -182,7 +197,6 @@ server <- function(input, output, session) {
     ),
     rownames = FALSE
   ))
-  
   
   output$rawdata <- DT::renderDataTable(DT::datatable(
     data=reactiveData(),
@@ -201,5 +215,4 @@ server <- function(input, output, session) {
     rownames = FALSE
   ))
   
-   
 }

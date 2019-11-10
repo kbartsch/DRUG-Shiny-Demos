@@ -13,60 +13,11 @@ sidebar <- dashboardSidebar(
         id="sidebar"
         ,menuItem("Overview",tabName="Overview",icon=icon("fas fa-home"))
         ,menuItem('Scatter with Table',tabName = "plots",icon = icon("bar-chart-o"))
-        ,menuItem('BoxPlot with Table',tabName = "plots2",icon = icon("bar-chart-o"))
         ,menuItem('Data Table',tabName = "table",icon = icon("fas fa-table"))
         ,br()
         ,conditionalPanel(
             condition = "input.sidebar == 'plots' | input.sidebar == 'plots2'"
             ,"Dataset Filters: "
-            ,pickerInput(
-                inputId = "selectedCut", 
-                label = "Cut",
-                choices = levels(data$cut), 
-                selected =levels(data$cut),
-                options = list(
-                    `actions-box` = TRUE,
-                    `live-search` = TRUE,
-                     size = 10,
-                    `selected-text-format` = "count > 3"
-                ),
-                choicesOpt = list(
-                    style = rep_len("color: black; line-height: 1.6;",length(levels(data$cut))+1)
-                ),
-                multiple = TRUE
-            )
-            ,pickerInput(
-                inputId = "selectedColor",
-                label = "Color",
-                choices = levels(data$color),
-                selected =levels(data$color),
-                options = list(
-                    `actions-box` = TRUE,
-                    `live-search` = TRUE,
-                    size = 10,
-                    `selected-text-format` = "count > 3"
-                ),
-                choicesOpt = list(
-                    style = rep_len("color: black; line-height: 1.6;",length(unique(data$color))+1)
-                ),
-                multiple = TRUE
-            )
-            ,pickerInput(
-                inputId = "selectedClarity",
-                label = "Clarity",
-                choices = levels(data$clarity),
-                selected = levels(data$clarity),
-                options = list(
-                    `actions-box` = TRUE,
-                    `live-search` = TRUE,
-                    size = 10,
-                    `selected-text-format` = "count > 3"
-                ),
-                choicesOpt = list(
-                    style = rep_len("color: black; line-height: 1.6;",length(unique(data$clarity))+1)
-                ),
-                multiple = TRUE
-            )
             ,sliderInput(
                 inputId = "selectedDepth",
                 label = "Depth",
@@ -115,41 +66,28 @@ body <- dashboardBody(
                 ),
                 column(
                     6,
-                    box(
-                        title = "",
-                        id = "",
-                        height= "auto",
-                        width = "auto",
-                        DT::dataTableOutput("scatterTable")
+                    fluidRow(
+                        box(
+                            title = "",
+                            id = "",
+                            height= "auto",
+                            width = "auto",
+                            DT::dataTableOutput("scatterCutsTable")
+                        )
+                    ), 
+                    fluidRow(
+                        box(
+                            title = "",
+                            id = "",
+                            height= "auto",
+                            width = "auto",
+                            DT::dataTableOutput("scatterColorsTable")
+                        )
                     )
                 )
             )
         )
-        ,tabItem(
-            tabName = "plots2", 
-            fluidRow(
-                column(
-                    6,
-                    box(
-                        title = "", 
-                        id = "",
-                        height= "auto",
-                        width = "auto",
-                        plotlyOutput("BoxPlot",height="750px")
-                    )
-                ),
-                column(
-                    6,
-                    box(
-                        title = "",
-                        id = "",
-                        height= "auto",
-                        width = "auto",
-                        DT::dataTableOutput("BoxplotTable")
-                    )
-                )
-            )
-        )
+        
         ,tabItem(
             tabName = "table", 
             fluidRow(
