@@ -8,7 +8,7 @@ header <- dashboardHeader(
 )
 
 sidebar <- dashboardSidebar(
-    width = 350,
+    width = 200,
     sidebarMenu(
         id="sidebar"
         ,menuItem("Overview",tabName="Overview",icon=icon("fas fa-home"))
@@ -80,11 +80,11 @@ body <- dashboardBody(
                 column(
                     12,
                     box(
-                        title = "",
+                        title = h1("Overview - Shiny App with Reactivity"),
                         id = "",
                         height= "auto",
                         width = "auto", 
-                        includeHTML(normalizePath(file.path('./www/overview.html'))) 
+                        withMathJax(includeMarkdown("overview.md"))
                     )
                 )
             )
