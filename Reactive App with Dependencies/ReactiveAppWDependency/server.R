@@ -33,36 +33,22 @@ server <- function(input, output, session) {
       
     })
   
-  observeEvent(c(input$selectedCutGroup2),{
+  observeEvent(c(input$selectedColorGroup),{
     
-    
-    cuts <- apply(
+    colors <- apply(
       data %>%
-        filter(CutGroup==input$selectedCutGroup2) %>%
-        distinct(cut)
-      ,1,paste,collapse="|"
-    )
-    
-    colorGroups <- apply(
-      data %>%
-        filter(CutGroup==input$selectedCutGroup2) %>%
-        distinct(ColorGroup)
+        filter(ColorGroup %in% input$selectedColorGroup) %>%
+        distinct(color)
       ,1,paste,collapse="|"
     )
     
     updateSelectInput(
       session,
-      'selectedCut2',
-      choices = cuts, 
-      selected = NULL
+      'selectedColor',
+      choices = colors, 
+      selected = colors
     )
     
-    updateSelectInput(
-      session,
-      'selectedColorGroup2',
-      choices = colorGroups, 
-      selected = NULL
-    )
     
   })
   

@@ -13,7 +13,7 @@ sidebar <- dashboardSidebar(
         id="sidebar"
         ,menuItem("Overview",tabName="Overview",icon=icon("fas fa-home"))
         ,menuItem('Plots',tabName = "plots",icon = icon("bar-chart-o"))
-        ,menuItem('Data Table',tabName = "table",icon = icon("fas fa-table"))
+        ,menuItem('Tables',tabName = "table",icon = icon("fas fa-table"))
         ,br()
     )
 )
@@ -26,11 +26,11 @@ body <- dashboardBody(
                 column(
                     12,
                     box(
-                        title = "",
+                        title = h1("Overview - Basic Shiny Apps"),
                         id = "",
                         height= "auto",
                         width = "auto", 
-                        includeHTML(normalizePath(file.path('./www/overview.html'))) 
+                        withMathJax(includeMarkdown("overview.md"))
                     )
                 )
             )

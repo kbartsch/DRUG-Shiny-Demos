@@ -43,12 +43,8 @@ server <- function(input, output, session) {
              legend = list(x = 100, y = 0.1),
              xaxis = x, 
              yaxis = y,
-             margin = margin,
-             titlefont=list(
-               family="'Noto Serif', serif",
-               size= 30,
-               color="#004F80"
-             )
+             margin = margin
+             
       ) %>%
       config(
         displayModeBar = TRUE,
@@ -70,7 +66,7 @@ server <- function(input, output, session) {
     
     x <- list(
       title = "Clarity",
-      titlefont = f,
+      font = f,
       showgrid = FALSE,
       zeroline = FALSE,
       showline = TRUE,
@@ -79,7 +75,7 @@ server <- function(input, output, session) {
     
     y <- list(
       title = "Price",
-      titlefont = f,
+      font = f,
       showgrid = FALSE,
       zeroline = FALSE,
       showline = TRUE,
@@ -109,11 +105,6 @@ server <- function(input, output, session) {
         xaxis = x,
         yaxis = y,
         font= f,
-        titlefont=list(
-          family="'Noto Serif', serif",
-          size=30,
-          color="#004F80"
-        ),
         margin = margin,
         showlegend = FALSE 
       ) %>%
