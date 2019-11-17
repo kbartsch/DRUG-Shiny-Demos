@@ -42,11 +42,11 @@ body <- dashboardBody(
                 column(
                     12,
                     box(
-                        title = "",
+                        title = h1("Reactivity using Data Tables"),
                         id = "",
                         height= "auto",
                         width = "auto", 
-                        includeHTML(normalizePath(file.path('./www/overview.html'))) 
+                        withMathJax(includeMarkdown("overview.md"))
                     )
                 )
             )
