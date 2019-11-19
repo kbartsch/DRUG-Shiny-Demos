@@ -8,38 +8,50 @@ Demo Shiny Apps for DRUG Talk on 11.19.19
 - Global.r
 
 ## Basic Shiny App with reactivity 
-UI input 
+Capturing UI Input 
+
+`input$<inputid>`
+
+[Basic Shiny App](https://github.com/kbartsch/DRUG-Shiny-Demos/tree/master/Basic%20Shiny%20App)
+
+Manipulating data in a reative way
 
 `reactive({})`
 
+[Shiny App with Reactivity](https://github.com/kbartsch/DRUG-Shiny-Demos/tree/master/Shiny%20App%20with%20Reactivity)
+
+Outputting changed data
+
+`output$outputid <- render ({ reactive() })`
 
 ## Reactivity with dependency 
-need to limit / update UI choice based on other inputs 
+When we need to limit / update UI choice based on other inputs 
 
-### observeEvent({})
+`observeEvent({})`
 - update choices 
 - update selected 
 
-### conditionalPanel () 
-- only show UI inputs based on conditions 
- 
-## reactive HTML output - titles, text, instructions, etc (may cut due to time) 
- 
+[Reactivity with Dependency](https://github.com/kbartsch/DRUG-Shiny-Demos/tree/master/Reactive%20App%20with%20Dependencies)
+
 ## reactivity from Data Table Selections - input$<>_rows_selected
 Take rows chosen from a DataTable and drive reactive output in another element 
  
-## reactivity from Plot interaction observeEvent({})
+ `input$<tableID_rows_selected>`
 
+[Reactivity using Data Tables](https://github.com/kbartsch/DRUG-Shiny-Demos/tree/master/Reactivity%20from%20Data%20Tables)
+
+## reactivity from Plot interaction 
 `event_data("<plot event>", source = "<sourceplot>"))`
+
 ### Plot Source 
 - naming plot sources 
 - adding keys 
 - Take clicked, brushed, selected points from a plot and drive reactive output in another element 
  
-## resetting selections in a reactive way (may cut due to time) 
-`runjs() `
- 
+[Reactivity with Plot Interaction](https://github.com/kbartsch/DRUG-Shiny-Demos/tree/master/Reactivity%20from%20Plot%20Interaction)
+
 ## Debugging 
+
 ### Printing Output 
 `print()` 
 ### Breaking into Browser session
@@ -47,3 +59,5 @@ Take rows chosen from a DataTable and drive reactive output in another element
 ### showcase mode
 
 ### reactive log
+
+[Debugging Examples](https://github.com/kbartsch/DRUG-Shiny-Demos/tree/master/Debugging%20Examples)
