@@ -13,7 +13,6 @@ sidebar <- dashboardSidebar(
         id="sidebar"
         ,menuItem("Overview",tabName="Overview",icon=icon("fas fa-home"))
         ,menuItem('Select Events',tabName = "plots",icon = icon("bar-chart-o"))
-      
         ,menuItem('Data Table',tabName = "table",icon = icon("fas fa-table"))
         ,br()
     )
@@ -27,11 +26,11 @@ body <- dashboardBody(
                 column(
                     12,
                     box(
-                        title = "",
+                        title = h1("Reactivity from Plot Interaction"),
                         id = "",
                         height= "auto",
                         width = "auto", 
-                        includeHTML(normalizePath(file.path('./www/overview.html'))) 
+                        withMathJax(includeMarkdown("overview.md"))
                     )
                 )
             )
@@ -65,8 +64,9 @@ body <- dashboardBody(
                             title = "",
                             id = "",
                             height= "auto",
-                            width = "auto",
-                            plotlyOutput("ColorCutDistribution", height="350px")
+                            width = "auto", 
+                            DT::dataTableOutput("selectedColorPoints")
+                            
                         )
                     )
                 )

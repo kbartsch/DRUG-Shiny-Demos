@@ -5,24 +5,8 @@ server <- function(input, output, session) {
   storeWarn<- getOption("warn")
   options(warn = -1) 
     
-  summaryDataReactive <- reactive({
-      
-      e <- event_data("plotly_click", source = "summaryPlot")
-
-      if(is.null(e)){
-          summaryData$currentSelectionInd <- 0
-      } else {
-          summaryData <- summaryData %>%
-              mutate(currentSelectionInd = ifelse(key==as.character(e$key),1,0))
-      }
-
-      return(summaryData)
-        
-  })
-    
   output$SummaryPlot <- renderPlotly({
       
-     
       f <- list(
           family = "Arial", 
           color = "rgb(58, 62, 65)", 
@@ -52,11 +36,10 @@ server <- function(input, output, session) {
                      r = 10,
                      t = 75
                      )
-      
-      #selected <- dataframe %>% filter(currentSelectionInd==1)
+
       
       p <- plot_ly(
-          data = summaryDataReactive(), 
+          data = summaryData, 
           type ='scatter',
           x = ~median_carat, 
           y = ~median_price, 
@@ -64,7 +47,7 @@ server <- function(input, output, session) {
           hoverinfo = 'text',
           mode = "markers",
           color = ~cut,
-          key = ~key, 
+          key = ~ key, 
           marker = list(size = 8,width = 2)
       ) %>% 
           layout(
@@ -163,6 +146,7 @@ server <- function(input, output, session) {
               y = ~price, 
               color= ~color, 
               key = ~key,
+              text = ~paste0('Cut: ',cut,'<br />color: ',color, '<br />price: ',price),
               hoverinfo = 'text',
               type = "box", 
               boxpoints = "all", 
@@ -228,87 +212,24 @@ server <- function(input, output, session) {
       }
   }) 
     
-  output$ColorCutDistribution <- renderPlotly({
-      
-      dataframe <- SelectedPointsColorReactive()
-      
-      if(!is.null(dataframe)){
-          
-          f <- list(
-              family = "Arial", 
-              color = "rgb(58, 62, 65)", 
-              size = 12
+  output$selectedColorPoints <- DT::renderDataTable(
+    DT::datatable(
+      data=SelectedPointsColorReactive(),
+      options = list(
+        autowidth=TRUE,
+        scrollX =TRUE,
+        scrollY = '700px',
+        columnDefs = list(
+          list(
+            width = '200px', 
+            targets = "_all"
           )
-          
-          x <- list(
-              title = "",
-              titlefont = f,
-              showgrid = FALSE,
-              zeroline = FALSE,
-              showline = TRUE,
-              showticklabels = TRUE
-          )
-          
-          y <- list(
-              title = "",
-              titlefont = f,
-              showgrid = FALSE,
-              zeroline = FALSE,
-              showline = TRUE,
-              showticklabels = TRUE
-          )
-          
-          margin <- list(autoexpand = TRUE,
-                         l = 25,
-                         r = 25,
-                         t = 50, 
-                         b = 20)
-          
-          
-          p <- plot_ly(
-              data = dataframe, 
-              y = ~price, 
-              color= ~clarity, 
-              hoverinfo = 'text',
-              type = "box", 
-              boxpoints = "all", 
-              jitter = 1,
-              pointpos = 0
-          ) %>% 
-              layout(
-                  title = 'Clarity vs. Price',
-                  xaxis = x,
-                  yaxis = y,
-                  font= f,
-                  titlefont=list(
-                      family="'Noto Serif', serif",
-                      size=30,
-                      color="#004F80"
-                  ),
-                  margin = margin,
-                  showlegend = FALSE 
-              ) %>%
-              config(
-                  displayModeBar = FALSE,
-                  displaylogo = FALSE,
-                  modeBarButtons = list(
-                      list("select2d"), 
-                      list("lasso2d"),
-                      list("toImage") 
-                  )
-              )
-          
-          p
-          
-      }
-      
-      else {
-          
-          NULL
-          
-      }
-      
-  })
+        ),
+        pageLength = 25
+      ),
+      rownames = FALSE
+    )
+  )
   
   
   output$rawdata <- DT::renderDataTable(DT::datatable(

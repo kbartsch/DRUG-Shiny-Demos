@@ -13,7 +13,8 @@ set.seed(12345678)
 data <- sample_n(data,1000)
 
 data <- data  %>%
-  mutate(key = paste0(cut,'-',color))
+  mutate(key = rownames(data))
+
 
 summaryData <- data %>%
   group_by(cut,color) %>%
